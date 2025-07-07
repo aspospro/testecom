@@ -6,6 +6,7 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductListingController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,15 +19,11 @@ use App\Http\Controllers\Api\ProductListingController;
 |
 */
 
+Route::middleware('guest')->post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-
-Route::get('/test', function (Request $request) {
-    return response()->json(['message' => 'Hello from Laravel']);
-});
-
+Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::post('/orders', [OrderController::class, 'store']);
