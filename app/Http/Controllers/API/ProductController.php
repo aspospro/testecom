@@ -34,4 +34,31 @@ class ProductController extends Controller
 
         return response()->json($result);
     }
+
+    public function show($id)
+    {
+        // Grab exactly one product or throw a 404
+        $product = Product::online()
+            ->with(['price' => function ($q) {
+                $q->select('product_id', 'base_price');
+            }])
+            ->findOrFail($id, [
+                'id',
+                'short_description',
+                'description',
+                'image_url',
+                'product_code'
+            ]);
+
+        // Shape it into the payload you want
+        $result = [
+            'id'         => $product->id,
+            'name'       => $product->short_description ?: $product->description,
+            'image_url'  => $product->image_url,
+            'code'       => $product->product_code,
+            'base_price' => optional($product->price)->base_price ?? 0,
+        ];
+
+        return response()->json($result);
+    }
 }

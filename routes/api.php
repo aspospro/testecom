@@ -35,4 +35,3 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('categories/{categoryId}/products', [ProductListingController::class, 'byCategory']);
 Route::get('categories/{categoryId}/groups/{groupId}/products',[ProductListingController::class,'byGroup']);
 Route::get('categories/{categoryId}/groups/{groupId}/subgroups/{subgroupId}/products',[ProductListingController::class,'bySubgroup']);
-
