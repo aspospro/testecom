@@ -7,6 +7,8 @@ use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductListingController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\DeliveryAddressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,18 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+    Route::get('/address', [AddressController::class, 'show']);              // Get invoice address
+    Route::put('/address', [AddressController::class, 'update']);            // Update invoice address
+
+    // Delivery Addresses
+    Route::get('/delivery-addresses', [DeliveryAddressController::class, 'index']);    // Get all delivery addresses
+    Route::post('/delivery-addresses', [DeliveryAddressController::class, 'store']);   // Create new
+    Route::put('/delivery-addresses/{id}', [DeliveryAddressController::class, 'update']); // Update
+    Route::delete('/delivery-addresses/{id}', [DeliveryAddressController::class, 'destroy']); // Delete
+});
+
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
