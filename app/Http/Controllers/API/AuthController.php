@@ -11,22 +11,22 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-    $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password');
 
-    if (!Auth::attempt($credentials)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
 
-    $user = Auth::user();
+        $user = Auth::user();
 
-    
-    $token = $user->createToken('auth_token')->plainTextToken;
+        
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-    return response()->json([
-        'message' => 'Login successful',
-        'user' => $user,
-        'token' => $token 
-    ]);
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token 
+        ]);
     }
 
     public function logout(Request $request)
