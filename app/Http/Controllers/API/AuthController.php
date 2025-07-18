@@ -11,22 +11,24 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-    $credentials = $request->only('email', 'password');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-    if (!Auth::attempt($credentials)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
+        $user = \App\Models\User::where('email', $request->email)->first();
 
-    $user = Auth::user();
+        if (! $user || ! \Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
 
-    
-    $token = $user->createToken('auth_token')->plainTextToken;
+        // ✅ No session started here
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-    return response()->json([
-        'message' => 'Login successful',
-        'user' => $user,
-        'token' => $token 
-    ]);
+        return response()->json([
+            'token' => $token,
+            'user' => $user,
+        ]);
     }
 
     public function logout(Request $request)

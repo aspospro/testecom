@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\ProductListingController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\DeliveryAddressController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CartController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,16 +30,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:sanctum')->prefix('user')->group(function () {
-    Route::get('/address', [AddressController::class, 'show']);              // Get invoice address
-    Route::put('/address', [AddressController::class, 'update']);            // Update invoice address
-
-    // Delivery Addresses
-    Route::get('/delivery-addresses', [DeliveryAddressController::class, 'index']);    // Get all delivery addresses
-    Route::post('/delivery-addresses', [DeliveryAddressController::class, 'store']);   // Create new
-    Route::put('/delivery-addresses/{id}', [DeliveryAddressController::class, 'update']); // Update
-    Route::delete('/delivery-addresses/{id}', [DeliveryAddressController::class, 'destroy']); // Delete
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user/address', [AddressController::class, 'show']);              // Get invoice address
+    Route::put('/user/address', [AddressController::class, 'update']);            // Update invoice address
+    Route::get('/user/delivery-addresses', [DeliveryAddressController::class, 'index']);    // Get all delivery addresses
+    Route::post('/user/delivery-addresses', [DeliveryAddressController::class, 'store']);   // Create new
+    Route::put('/user/delivery-addresses/{id}', [DeliveryAddressController::class, 'update']); // Update
+    Route::delete('/user/delivery-addresses/{id}', [DeliveryAddressController::class, 'destroy']); // Delete
+    Route::get('/user/profile', [UserController::class, 'profile']);
+    Route::put('/user/profile', [UserController::class, 'updateProfile']);
+    Route::post('/user/change-password', [UserController::class, 'changePassword']);
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart', [CartController::class, 'store']);
+    Route::put('/cart/{id}', [CartController::class, 'update']);
+    Route::delete('/cart/{id}', [CartController::class, 'destroy']);
 });
+
+
 
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/products', [ProductController::class, 'index']);
